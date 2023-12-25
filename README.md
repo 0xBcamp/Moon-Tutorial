@@ -26,9 +26,9 @@ In addition, the Moon API library streamlines blockchain interactions with the M
 
 ## High-Level Architecture 🏗️
 
-![Moon High-Level Architecture](link-to-architecture-image)
+![Moon High-Level Architecture](https://github.com/0xBcamp/Moon-Tutorial/blob/main/moon_flowchart.png)
 
-High Level Architecture Description
+High Level Architecture Description Insert Here
 
 ## Tutorial ✅
 
