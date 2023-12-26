@@ -45,8 +45,8 @@ High Level Architecture Description Insert Here
 ### What You Will Learn 💡
 
 - Setting up Moon SDK and integrating it into your project.
-- Exploring the components of Moon and understanding their functionalities.
-- Building user-friendly dApps with Moon Wallet, complete with secure authentiaction and AI compatability.
+- Initilizing your project by setting up a Moon SDK React Hook, complete with helpful starter functions.
+- Creating a simple front end login page to create and sign in with a Moonup account.
 
 ### Tutorial Steps 📋
 
