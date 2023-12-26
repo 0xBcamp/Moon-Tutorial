@@ -48,7 +48,7 @@ High Level Architecture Description Insert Here
 
 To get started with Moon SDK, clone the repository, install the required dependencies, and create a react & next.js boilerplate project using either npm or yarn.
 
-1. Colone the github moon-sdk package. Please note this package is available in multiple languagues. For this tutorial, we will clone the below TypeScript package.
+1. Clone the github moon-sdk package. Please note this package is available in multiple languagues. For this tutorial, we will clone the below TypeScript package.
 ```
 git clone https://github.com/moon-up/moon-sdk.git
 ```
@@ -95,12 +95,14 @@ touch usemoonsdk.js
 ```
 3. Open usemoonsdk.js with your preferred text editor, and let's start coding. First let's import 3 required modules: Moon SDK, Moon Types: AUTH, MOON_SESSION_KEY, Storage - all included in the Moon Types package and needed for MoonUp inilization, and React hooks of useEffect and useState.
 ```
+// Import the required modules
 const { MoonSDK } = require('@moonup/moon-sdk');
 const { AUTH, MOON_SESSION_KEY, Storage } = require('@moonup/moon-types');
 const { useEffect, useState } = require('react');
 ```
 4. Now let's define our Moon SDK interface, defining a MoonSDKHook variable. The MoonSDKHook is comprised of several items we will use within the codes core functions.
 ```
+// Define the MoonSDKHook interface
 const MoonSDKHook = {
     moon: null,
     initialize: null,
@@ -109,7 +111,142 @@ const MoonSDKHook = {
     updateToken: null,
 };
 ```
-5. 
+5. Now let's define the useMoonSDK function and export it as a React hook. This function initializes the Moon SDK and connects to the MoonUp platform.
+```
+// Export the useMoonSDK function
+module.exports.useMoonSDK = function () {
+    // Use useState to create state variables
+    const [moon, setMoon] = useState(null);
+    // Define the initialize function
+    const initialize = async () => {
+        const moonInstance = new MoonSDK({
+            Storage: {
+                key: MOON_SESSION_KEY,
+                type: Storage.SESSION,
+            },
+            Auth: {
+                AuthType: AUTH.JWT,
+            },
+        });
+        // Connect to the MoonUp platform
+        await moonInstance.connect();
+        setMoon(moonInstance);
+        moonInstance.login();
+    };
+```
+6. Let's define some additional functions for disconnect, list accounts, and update token. More functions can be defined, but for now, we will define these 3 as common functions you may use on your project.
+```
+    // Define the disconnect function
+    const disconnect = async () => {
+        if (moon) {
+            await moon.disconnect();
+            setMoon(null);
+        }
+    };
+    // Define the listAccounts function
+    const listAccounts = async () => {
+        if (moon) {
+            return moon.listAccounts();
+        }
+    };
+    // Define the updateToken function
+    const updateToken = async (token) => {
+        if (moon) {
+            return moon.updateToken(token);
+        }
+    };
+```
+7. Use useEffect to call initialize on component mount.
+```
+    // Use useEffect to call initialize on component mount
+    useEffect(() => {
+        initialize();
+    }, []);
+```
+8. Finally, return the MoonSDKHook object with all state variables and functions we defined in the above. This way, these variables and functions can be used in other componenents of our project.
+```
+    // Return the MoonSDKHook object
+    return {
+        ...MoonSDKHook,
+        moon,
+        initialize,
+        disconnect,
+        listAccounts,
+        updateToken
+    };
+};
+```
+9. Here is the full code for usemoonsdk.js
+```
+// Import the required modules
+const { MoonSDK } = require('@moonup/moon-sdk');
+const { AUTH, MOON_SESSION_KEY, Storage } = require('@moonup/moon-types');
+const { useEffect, useState } = require('react');
+// Define the MoonSDKHook interface
+const MoonSDKHook = {
+    moon: null,
+    initialize: null,
+    disconnect: null,
+    listAccounts: null,
+    updateToken: null,
+};
+// Export the useMoonSDK function
+module.exports.useMoonSDK = function () {
+    // Use useState to create state variables
+    const [moon, setMoon] = useState(null);
+    // Define the initialize function
+    const initialize = async () => {
+        const moonInstance = new MoonSDK({
+            Storage: {
+                key: MOON_SESSION_KEY,
+                type: Storage.SESSION,
+            },
+            Auth: {
+                AuthType: AUTH.JWT,
+            },
+        });
+        // Connect to the MoonUp platform
+        await moonInstance.connect();
+        setMoon(moonInstance);
+        moonInstance.login();
+    };
+    // Define the disconnect function
+    const disconnect = async () => {
+        if (moon) {
+            await moon.disconnect();
+            setMoon(null);
+        }
+    };
+    // Define the listAccounts function
+    const listAccounts = async () => {
+        if (moon) {
+            return moon.listAccounts();
+        }
+    };
+    // Define the updateToken function
+    const updateToken = async (token) => {
+        if (moon) {
+            return moon.updateToken(token);
+        }
+    };
+    // Use useEffect to call initialize on component mount
+    useEffect(() => {
+        initialize();
+    }, []);
+    // Return the MoonSDKHook object
+    return {
+        ...MoonSDKHook,
+        moon,
+        initialize,
+        disconnect,
+        listAccounts,
+        updateToken
+    };
+};
+```
+#### Creating a Simple Front End Login Page ✅
+
+Now that we have set-up our boilerplate complete with the usemoonsdk.js componenent to initlize the project, let's create a simple a simple front end logic page to create or sign in with a moon account.
 
 ## Resources 📚
 
