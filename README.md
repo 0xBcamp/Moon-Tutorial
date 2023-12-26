@@ -44,21 +44,72 @@ High Level Architecture Description Insert Here
 
 ### Tutorial Steps 📋
 
-### Dependencies
+#### Setting up Your Project with Moon SDK ✅
 
-To get started with Moon SDK, clone the repository and install the required dependencies using either npm or yarn.
+To get started with Moon SDK, clone the repository, install the required dependencies, and create a react & next.js boilerplate project using either npm or yarn.
 
-#### Using npm
-
+1. Colone the github moon-sdk package. Please note this package is available in multiple languagues. For this tutorial, we will clone the below TypeScript package.
+```
 git clone https://github.com/moon-up/moon-sdk.git
+```
+2. Navigate to moon-sdk - the git package we just cloned.
+```
 cd moon-sdk
-npm install @moonup/moon-api @moonup/moon-sdk ethers
+```
+3. Install  @moonup/moon-sdk, which will give install the dependencies needed to start our project.
 
-#### Using yarn
+Using npm
+```
+npm install @moonup/moon-sdk
+```
+Using yarn
+```
+yarn add @moonup/moon-sdk
+```
+4. Create the Next.JS and React boilderplate using npx @moonup/create
+```
+npx @moonup/create
+```
+5. Answer the questions to create the Next.js and React boilerplate. While you can certianly configure options as needed for the project, let's enter the below for this tutorial. Let's use name our app 'my-moon-app-test', use JavaScript as the primary lanuguaue - we do so by selecting 'No' to TypeScript, and select 'Yes' for all other options, expcept for ' default import alias'.
+```
+? What is your project named? » my-moon-app-test
+? Would you like to use TypeScript? » No
+? Would you like to use ESLint? » Yes
+? Would you like to use PWA? » Yes
+? Would you like to use Moon Wallet? » Yes
+? Would you like to use Tailwind CSS? » Yes
+? Would you like to use `src/` directory? » Yes
+? Would you like to customize the default import alias (@/*)? » No
+```
+#### Initlizing Your Project with a Moon SDK React Hook ✅
 
-git clone https://github.com/moon-up/moon-sdk.git
-cd moon-sdk
-yarn add @moonup/moon-api @moonup/moon-sdk ethers
+Now that we have our boilerplate, let's code a componenet that initilizes and connects our project to the Moonup platform. We will also set up some other functions that may be useful to our project: dissconnect, list accounts, and update token. This componenet will be defined as 'MoonSDKHook' and will be configured as a React hook to uilize in other componenents of our project.
+
+1. Navigate to the pages folder of my-moon-app-test using the below file path.
+```
+cd moon-sdk/my-moon-app-test/src/pages
+```
+2. Create a new React componenet titled: 'usemoonsdk.js'
+```
+touch usemoonsdk.js
+```
+3. Open usemoonsdk.js with your preferred text editor, and let's start coding. First let's import 3 required modules: Moon SDK, Moon Types: AUTH, MOON_SESSION_KEY, Storage - all included in the Moon Types package and needed for MoonUp inilization, and React hooks of useEffect and useState.
+```
+const { MoonSDK } = require('@moonup/moon-sdk');
+const { AUTH, MOON_SESSION_KEY, Storage } = require('@moonup/moon-types');
+const { useEffect, useState } = require('react');
+```
+4. Now let's define our Moon SDK interface, defining a MoonSDKHook variable. The MoonSDKHook is comprised of several items we will use within the codes core functions.
+```
+const MoonSDKHook = {
+    moon: null,
+    initialize: null,
+    disconnect: null,
+    listAccounts: null,
+    updateToken: null,
+};
+```
+5. 
 
 ## Resources 📚
 
@@ -71,4 +122,4 @@ yarn add @moonup/moon-api @moonup/moon-sdk ethers
 
 ## Troubleshooting 👯‍♂️
 
-If you encounter any issues or have questions, join our [Discord community](link-to-discord) for support and discussions.
+If you encounter any issues or have questions, join our [Discord community](https://discord.gg/UpG6Gmks) for support and discussions.
