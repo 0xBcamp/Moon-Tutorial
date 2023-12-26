@@ -2,6 +2,12 @@
 
 Welcome to the Moon Workshop, your comprehensive guide to exploring and integrating the Moon ecosystem. This workshop will take you through the various components of Moon, helping you harness its power for developing user-friendly dApps, secure authentication, and AI-compatible transactions.
 
+- [Product Description](#product-description-)
+- [Architecture](#architecture)
+- [Tutorial](#tutorial-)
+- [Resources](#resources-)
+- [Troubleshooting](#troubleshooting-)
+
 ## Product Description 🧩
 
 Moon is a highly composable wallet infrastructure designed to simplify user-friendly, AI-compatible dApp development. Comprising wallet as a service, authentication as a service, and AI as a service products, Moon offers seamless integration for payment processing, data infrastructure solutions, highly steamlined and abstracted blockchain transations, and more. Moon is compatible with all standard EVM blockchains, allowing developers and users a universal experience regalrdess of what chain being used.
@@ -24,7 +30,7 @@ Moon is a highly composable wallet infrastructure designed to simplify user-frie
 
 - **Moon API:** In addition, the Moon API library streamlines blockchain interactions with the Moon platform. Developers can leverage this library to fetch account details, initiate transactions, configure authentication, handle session management, and more.
 
-## High-Level Architecture 🏗️
+## Architecture
 
 ![Moon High-Level Architecture](https://github.com/0xBcamp/Moon-Tutorial/blob/main/moon_flowchart.png)
 
@@ -246,7 +252,7 @@ module.exports.useMoonSDK = function () {
 ```
 #### Creating a Simple Front End Login Page ✅
 
-Now that we have set-up our boilerplate complete with the usemoonsdk.js componenent to initlize the project, let's create a simple a simple front end logic page to create or sign in with a moon account.
+Now that we have set-up our boilerplate complete with the usemoonsdk.js componenent to initlize the project, let's create a simple front end login page to create a Moon account, or sign in with an existing Moon account.
 
 ## Resources 📚
 
@@ -257,6 +263,6 @@ Now that we have set-up our boilerplate complete with the usemoonsdk.js componen
 - **Moon Package Documentation:** [https://docs.usemoon.ai/docs/moon-sdk/introduction](https://docs.usemoon.ai/docs/moon-sdk/introduction)
 - **Moon ChatGPT AI Plugin Spec:** [https://vault-api.usemoon.ai/.well-known/ai-plugin.json](https://vault-api.usemoon.ai/.well-known/ai-plugin.json)
 
-## Troubleshooting 👯‍♂️
+## Troubleshooting 👯
 
 If you encounter any issues or have questions, join our [Discord community](https://discord.gg/UpG6Gmks) for support and discussions.
