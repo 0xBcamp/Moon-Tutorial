@@ -785,7 +785,8 @@ export default SignupPage;
 cd moon-sdk/my-moon-test-app
  ```
 12. Launch the application by entering the following command in your terminal:
-For npm
+
+For npm:
  ```
 npm run dev
  ```
