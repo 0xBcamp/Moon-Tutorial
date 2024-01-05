@@ -42,7 +42,7 @@ Users can construct and sign transactions using methods similar to those in ethe
 
 ### Video Tutorial 🎥
 
-[![Moon Workshop Tutorial](link-to-tutorial-video-thumbnail)](link-to-tutorial-video)
+[![Moon Workshop Tutorial](link-to-tutorial-video-thumbnail)](link-to-tutorial-video) COMING SOON
 
 ### What You Will Learn 💡
 
