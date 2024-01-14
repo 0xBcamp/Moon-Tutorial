@@ -771,7 +771,7 @@ export default SignupPage;
 ```
 11. To run the application, navigate in the terminal to the project folder
  ```
-cd moon-sdk/my-moon-test-app
+cd moon-sdk/my-moon-app-test
  ```
 12. Launch the application by entering the following command in your terminal:
 
