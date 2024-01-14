@@ -200,12 +200,6 @@ export const useMoonSDK = () => {
         moonInstance.login();
     };
 
-    const connect = async () => {
-        if (moon) {
-            return moon.connect();
-        }
-    };
-
     const updateToken = async (token: string, refreshToken: string) => {
         if (moon) {
             moon.updateToken(token);
@@ -234,7 +228,6 @@ export const useMoonSDK = () => {
     return {
         moon,
         initialize,
-        connect,
         updateToken,
         createAccount,
         disconnect,
@@ -246,7 +239,7 @@ export const useMoonSDK = () => {
 
 Now that we've established our project's foundation, complete with the usemoonsdk.tsx component for project initialization, let's craft a straightforward front-end signup page. This page will enable users to create a Moon account, sign in, and obtain an authenticated wallet address.
 
-It's important to mention that, for the sake of this tutorial, we won't delve into styling intricacies or the modularization of connect, signup, and signin pages into separate components. The primary focus here is to spotlight the code logic. Feel free to explore and implement styling or structural improvements after completing the tutorial.
+It's important to mention that, for the sake of this tutorial, we won't delve into styling intricacies or the modularization of initialize, signup, and signin pages into separate components. The primary focus here is to spotlight the code logic. Feel free to explore and implement styling or structural improvements after completing the tutorial.
 
 1. Import the React use state hook, useMoonSDK hook, and Moon API interfaces for email login and sign up at the beginning of the _app.tsx file.
 ```
@@ -275,7 +268,7 @@ export default SignupPage;
 ```
 3. Initialize the useMoonSDK hook to access Moon functionalities.
 ```
-const { moon, connect, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
+const { moon, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
 ```
 4. Implement functions to handle form input changes.
 ```
@@ -299,7 +292,6 @@ const { moon, connect, createAccount, disconnect, updateToken, initialize } = us
             setError(null);
             console.log('Initializing and connecting to Moon...');
             await initialize();
-            await connect();
             console.log('Connected to Moon!');
             setIsConnected(true);
         } catch (error) {
@@ -537,7 +529,7 @@ const SignupPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const { moon, connect, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
+    const { moon, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
@@ -559,7 +551,6 @@ const SignupPage: React.FC = () => {
             // Initialize and connect to Moon
             console.log('Initializing and connecting to Moon...');
             await initialize();
-            await connect();
             console.log('Connected to Moon!');
             setIsConnected(true);
         } catch (error) {
