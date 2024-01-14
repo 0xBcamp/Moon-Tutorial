@@ -274,6 +274,11 @@ const SignupPage: React.FC = () => {
     const [isConnected, setIsConnected] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+
+};
+
+export default SignupPage;
 ```
 3. Initialize the useMoonSDK hook to access Moon functionalities.
 ```
