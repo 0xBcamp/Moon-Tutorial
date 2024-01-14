@@ -91,7 +91,7 @@ npx @moonup/create
 ```
 #### Initlizing Your Project with a Moon SDK React Hook ✅
 
-Now that we have our boilerplate, let's code a componenet that initilizes and connects our project to the Moonup platform. We will also set up some other functions that may be useful to our project: connect, dissconnect, update token, and more. This componenet will be defined as 'MoonSDKHook' and will be configured as a React hook to uilize in other componenents of our project.
+Now that we have our boilerplate, let's code a componenet that initilizes and connects our project to the Moonup platform. We will also set up some other functions that may be useful to our project: initialize, dissconnect, update token, and more. This componenet will be defined as 'MoonSDKHook' and will be configured as a React hook to uilize in other componenents of our project.
 
 1. Navigate to the pages folder of my-moon-app-test using the below file path.
 ```
@@ -137,14 +137,8 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
         moonInstance.login();
     };
 ```
-9. Let's now define additional functions we will need for our code: connect, update token, create account, and disconncet. There are many more functions you can defined, but these are commmon ones you may use on your moon project.
+9. Let's now define additional functions we will need for our code: update token, create account, and disconnect. There are many more functions you can defined, but these are commmon ones you may use on your moon project.
 ```
-
-    const connect = async () => {
-        if (moon) {
-            return moon.connect();
-        }
-    };
 
     const updateToken = async (token: string, refreshToken: string) => {
         if (moon) {
@@ -176,7 +170,6 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
     return {
         moon,
         initialize,
-        connect,
         updateToken,
         createAccount,
         disconnect,
