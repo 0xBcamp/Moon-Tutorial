@@ -28,7 +28,7 @@ Moon is a highly composable wallet infrastructure designed to simplify user-frie
 
 - **Moon SDK:** Moon provides developers with a powerful Software Development Kit (SDK) in multiple languages, offering pre-built components such as code snippets and a React boilerplate. This SDK serves as a robust foundation for initiating and maintaining projects. Check out Moon SDK in multiple langugues [here!](https://github.com/moon-up)
 
-- **Moon API:** In addition, the Moon API library streamlines blockchain interactions with the Moon platform. Developers can leverage this library to fetch account details, initiate transactions, configure authentication, handle session management, and more. Check out Moon API documention [here!]((https://docs.usemoon.ai/)
+- **Moon API:** In addition, the Moon API library streamlines blockchain interactions with the Moon platform. Developers can leverage this library to fetch account details, initiate transactions, configure authentication, handle session management, and more. Check out Moon API documentation [here!](https://docs.usemoon.ai/)
 
 ## Architecture
 
