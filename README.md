@@ -91,7 +91,7 @@ npx @moonup/create
 ```
 #### Initlizing Your Project with a Moon SDK React Hook ✅
 
-Now that we have our boilerplate, let's code a componenet that initilizes and connects our project to the Moonup platform. We will also set up some other functions that may be useful to our project: dissconnect, list accounts, update token, anr more. This componenet will be defined as 'MoonSDKHook' and will be configured as a React hook to uilize in other componenents of our project.
+Now that we have our boilerplate, let's code a componenet that initilizes and connects our project to the Moonup platform. We will also set up some other functions that may be useful to our project: connect, dissconnect, update token, and more. This componenet will be defined as 'MoonSDKHook' and will be configured as a React hook to uilize in other componenents of our project.
 
 1. Navigate to the pages folder of my-moon-app-test using the below file path.
 ```
