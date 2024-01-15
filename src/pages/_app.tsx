@@ -1,5 +1,4 @@
 import {
-	AccountResponse,
 	EmailLoginInput,
 	EmailSignupInput,
 } from '@moonup/moon-api';
@@ -116,11 +115,8 @@ const SignupPage: React.FC = () => {
 			console.log('Setting expiry and navigating...');
 			moon.MoonAccount.setExpiry(loginResponse.data.expiry);
 			setSignInSuccess(true);
-			setAuthenticatedAddress((newAccount.data as AccountResponse).address);
-			console.log(
-				'Authenticated Address:',
-				(newAccount?.data as AccountResponse)?.address
-			);
+			setAuthenticatedAddress(newAccount.data.data.address);
+			console.log('Authenticated Address:', newAccount.data.data.address);
 		} catch (error) {
 			console.error('Error during sign-in:', error);
 			setError('Error signing in. Please try again.');
