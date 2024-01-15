@@ -139,37 +139,43 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
 ```
 9. Let's now define additional functions we will need for our code: update token, create account, and disconnect. There are many more functions you can defined, but these are commmon ones you may use on your moon project.
 ```
+const connect = async () => {
+		if (moon) {
+			return moon.connect();
+		}
+	};
 
-    const updateToken = async (token: string, refreshToken: string) => {
-        if (moon) {
-            moon.updateToken(token);
-            moon.updateRefreshToken(refreshToken);
+const updateToken = async (token: string, refreshToken: string) => {
+		if (moon) {
+			moon.updateToken(token);
+			moon.updateRefreshToken(refreshToken);
 
-            moon.connect();
-        }
-    };
+			moon.connect();
+		}
+	};
 
-    const createAccount = async () => {
-        if (moon) {
-            const data: CreateAccountInput = {};
-            const newAccount = await moon?.getAccountsSDK().createAccount(data);
-            return newAccount;
-        }
-    }
+	const createAccount = async () => {
+		if (moon) {
+			const data: CreateAccountInput = {};
+			const newAccount = await moon?.getAccountsSDK().createAccount(data);
+			return newAccount;
+		}
+	};
 
-    const disconnect = async () => {
-        if (moon) {
-            await moon.disconnect();
-            sessionStorage.removeItem(MOON_SESSION_KEY)
-            setMoon(null);
-        }
-    }
+	const disconnect = async () => {
+		if (moon) {
+			await moon.disconnect();
+			sessionStorage.removeItem(MOON_SESSION_KEY);
+			setMoon(null);
+		}
+	};
 ```
 10. Finally, return the MoonSDKHook object with all state variables and functions we defined in the above. This way, these variables and functions can be used in other componenents of our project.
 ```
     return {
         moon,
         initialize,
+        connect,
         updateToken,
         createAccount,
         disconnect,
@@ -177,62 +183,69 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
 ```
 11. Here is the full code for usemoonsdk.tsx
 ```
-import { MoonSDK } from "@moonup/moon-sdk";
-import { useState } from "react";
-import { AUTH, MOON_SESSION_KEY, Chain,Storage } from "@moonup/moon-types";
-import { CreateAccountInput } from "@moonup/moon-api";
+import { CreateAccountInput } from '@moonup/moon-api';
+import { MoonSDK } from '@moonup/moon-sdk';
+import { AUTH, MOON_SESSION_KEY, Storage } from '@moonup/moon-types';
+import { useState } from 'react';
 
 export const useMoonSDK = () => {
-    const [moon, setMoon] = useState<MoonSDK | null>(null);
+	const [moon, setMoon] = useState<MoonSDK | null>(null);
 
-    const initialize = async () => {
-        const moonInstance = new MoonSDK({
-            Storage: {
-                key: MOON_SESSION_KEY,
-                type: Storage.SESSION,
-            },
-            Auth: {
-                AuthType: AUTH.JWT,
-            },
+	const initialize = async () => {
+		const moonInstance = new MoonSDK({
+			Storage: {
+				key: MOON_SESSION_KEY,
+				type: Storage.SESSION,
+			},
+			Auth: {
+				AuthType: AUTH.JWT,
+			},
+		});
+		setMoon(moonInstance);
+		moonInstance.connect();
+	};
 
-        });
-        setMoon(moonInstance);
-        moonInstance.connect();
-    };
+	const connect = async () => {
+		if (moon) {
+			return moon.connect();
+		}
+	};
 
-    const updateToken = async (token: string, refreshToken: string) => {
-        if (moon) {
-            moon.updateToken(token);
-            moon.updateRefreshToken(refreshToken);
+	const updateToken = async (token: string, refreshToken: string) => {
+		if (moon) {
+			moon.updateToken(token);
+			moon.updateRefreshToken(refreshToken);
 
-            moon.connect();
-        }
-    };
+			moon.connect();
+		}
+	};
 
-    const createAccount = async () => {
-        if (moon) {
-            const data: CreateAccountInput = {};
-            const newAccount = await moon?.getAccountsSDK().createAccount(data);
-            return newAccount;
-        }
-    }
+	const createAccount = async () => {
+		if (moon) {
+			const data: CreateAccountInput = {};
+			const newAccount = await moon?.getAccountsSDK().createAccount(data);
+			return newAccount;
+		}
+	};
 
-    const disconnect = async () => {
-        if (moon) {
-            await moon.disconnect();
-            sessionStorage.removeItem(MOON_SESSION_KEY)
-            setMoon(null);
-        }
-    }
+	const disconnect = async () => {
+		if (moon) {
+			await moon.disconnect();
+			sessionStorage.removeItem(MOON_SESSION_KEY);
+			setMoon(null);
+		}
+	};
 
-    return {
-        moon,
-        initialize,
-        updateToken,
-        createAccount,
-        disconnect,
-    }
-}
+	return {
+		moon,
+		initialize,
+		connect,
+		updateToken,
+		createAccount,
+		disconnect,
+	};
+};
+
 ```
 #### Creating a Simple Front End Login Page ✅
 
@@ -243,23 +256,26 @@ It's important to mention that, for the sake of this tutorial, we won't delve in
 
 1. Import the React use state hook, useMoonSDK hook, and Moon API interfaces for email login and sign up at the beginning of the _app.tsx file.
 ```
+import {
+	EmailLoginInput,
+	EmailSignupInput,
+} from '@moonup/moon-api';
 import { useState } from 'react';
-import { useMoonSDK } from './useMoonSDK';
-import { EmailLoginInput, EmailSignupInput } from '@moonup/moon-api';
+import { useMoonSDK } from './usemoonsdk';
 ```
 2. Create the SignupPage component and initialize state variables.
 ```
 const SignupPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [signupSuccess, setSignupSuccess] = useState(false);
-    const [signInSuccess, setSignInSuccess] = useState(false);
-    const [authenticatedAddress, setAuthenticatedAddress] = useState('');
-    const [isConnected, setIsConnected] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+	const [signupSuccess, setSignupSuccess] = useState(false);
+	const [signInSuccess, setSignInSuccess] = useState(false);
+	const [authenticatedAddress, setAuthenticatedAddress] = useState('');
+	const [isConnected, setIsConnected] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 
 };
@@ -268,7 +284,7 @@ export default SignupPage;
 ```
 3. Initialize the useMoonSDK hook to access Moon functionalities.
 ```
-const { moon, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
+const { moon, connect, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
 ```
 4. Implement functions to handle form input changes.
 ```
@@ -286,110 +302,115 @@ const { moon, createAccount, disconnect, updateToken, initialize } = useMoonSDK(
 ```
 5. Implement the handleInitializeAndConnect function for initializing and connecting to Moon.
 ```
-    const handleInitializeAndConnect = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            console.log('Initializing and connecting to Moon...');
-            await initialize();
-            console.log('Connected to Moon!');
-            setIsConnected(true);
-        } catch (error) {
-            console.error('Error during connection:', error);
-            setError('Error connecting to Moon. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+	const handleInitializeAndConnect = async () => {
+		try {
+			setLoading(true);
+			setError(null);
+			console.log('Initializing and connecting to Moon...');
+			await initialize();
+			await connect();
+			console.log('Connected to Moon!');
+			setIsConnected(true);
+		} catch (error) {
+			console.error('Error during connection:', error);
+			setError('Error connecting to Moon. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 ```
 6. Implement the handleSignup function for user registration.
 ```
- const handleSignup = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            if (password !== confirmPassword) {
-                setPasswordError('Passwords do not match');
-            } else {
-                setPasswordError('');
+	const handleSignup = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-                const auth = moon.getAuthSDK();
-                const signupRequest: EmailSignupInput = {
-                    email,
-                    password,
-                };
-                console.log('Signing up...');
-                const signupResponse: any = await auth.emailSignup(signupRequest);
-                console.log('Signup successful:', signupResponse);
+			if (password !== confirmPassword) {
+				setPasswordError('Passwords do not match');
+			} else {
+				setPasswordError('');
 
-                setSignupSuccess(true);
-            }
-        } catch (error) {
-            console.error('Error during signup:', error);
-            setError('Error signing up. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+				const auth = moon.getAuthSDK();
+				const signupRequest: EmailSignupInput = {
+					email,
+					password,
+				};
+				console.log('Signing up...');
+				const signupResponse: any = await auth.emailSignup(signupRequest);
+				console.log('Signup successful:', signupResponse);
+
+				setSignupSuccess(true);
+			}
+		} catch (error) {
+			console.error('Error during signup:', error);
+			setError('Error signing up. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
+
 ```
 7. Implement the handleSignIn function for user authentication and sign-in.
 ```
-   const handleSignIn = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+	const handleSignIn = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
+			const auth = moon.getAuthSDK();
+			const loginRequest: EmailLoginInput = {
+				email,
+				password,
+			};
+			console.log('Authenticating...');
+			const loginResponse: any = await auth.emailLogin(loginRequest);
+			console.log('Authentication successful:', loginResponse);
 
-            const auth = moon.getAuthSDK();
-            const loginRequest: EmailLoginInput = {
-                email,
-                password,
-            };
-            console.log('Authenticating...');
-            const loginResponse: any = await auth.emailLogin(loginRequest);
-            console.log('Authentication successful:', loginResponse);
+			console.log('Updating tokens and email...');
+			await updateToken(
+				loginResponse.data.token,
+				loginResponse.data.refreshToken
+			);
+			moon.MoonAccount.setEmail(email);
+			moon.MoonAccount.setExpiry(loginResponse.data.expiry);
+			console.log('Tokens and email updated!');
 
-            console.log('Updating tokens and email...');
-            await updateToken(loginResponse.data.token, loginResponse.data.refreshToken);
-            moon.MoonAccount.setEmail(email);
-            moon.MoonAccount.setExpiry(loginResponse.data.expiry);
-            console.log('Tokens and email updated!');
-
-
-            console.log('Creating account...');
-            const newAccount = await createAccount();
-            console.log('New Account Data:', newAccount?.data);
-            console.log('Setting expiry and navigating...');
-            moon.MoonAccount.setExpiry(loginResponse.data.expiry);
-            setSignInSuccess(true);
-            setAuthenticatedAddress(newAccount.data.data.address);
-            console.log('Authenticated Address:', newAccount.data.data.address);
-        } catch (error) {
-            console.error('Error during sign-in:', error);
-            setError('Error signing in. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+			console.log('Creating account...');
+			const newAccount = await createAccount();
+			console.log('New Account Data:', newAccount?.data);
+			console.log('Setting expiry and navigating...');
+			moon.MoonAccount.setExpiry(loginResponse.data.expiry);
+			setSignInSuccess(true);
+			setAuthenticatedAddress(newAccount.data.data.address);
+			console.log('Authenticated Address:', newAccount.data.data.address);
+		} catch (error) {
+			console.error('Error during sign-in:', error);
+			setError('Error signing in. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 ```
 8. Implement the handleDisconnect function for disconnecting from Moon.
 ```
-const handleDisconnect = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+	const handleDisconnect = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-            console.log('Disconnecting...');
-            await disconnect();
-            console.log('Disconnected');
-            setIsConnected(false);
-        } catch (error) {
-            console.error('Error during disconnection:', error);
-            setError('Error disconnecting from Moon. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+			// Disconnect from Moon
+			console.log('Disconnecting...');
+			await disconnect();
+			console.log('Disconnected');
+			setIsConnected(false);
+		} catch (error) {
+			console.error('Error during disconnection:', error);
+			setError('Error disconnecting from Moon. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 ```
 9. Finally, return the JSX structure for the entire SignupPage component. Use the state variables for IsConnected, SignupSuccess, & SigninSuccess for IF statements for each page, so the user can successfuly naviage through the application based on their connection, sign-up or sign-in status.
 ```
@@ -513,262 +534,278 @@ return (
 ```
 10. The full code is below and also available in this repo. Again, the primary focus here is to spotlight the code logic. Feel free to explore and implement styling or structural improvements on your own.
 ```
+import {
+	EmailLoginInput,
+	EmailSignupInput,
+} from '@moonup/moon-api';
 import { useState } from 'react';
-import { useMoonSDK } from './useMoonSDK';
-import { EmailLoginInput, EmailSignupInput } from '@moonup/moon-api';
+import { useMoonSDK } from './usemoonsdk';
 
 const SignupPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [signupSuccess, setSignupSuccess] = useState(false);
-    const [signInSuccess, setSignInSuccess] = useState(false);
-    const [authenticatedAddress, setAuthenticatedAddress] = useState('');
-    const [isConnected, setIsConnected] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	const [passwordError, setPasswordError] = useState('');
+	const [signupSuccess, setSignupSuccess] = useState(false);
+	const [signInSuccess, setSignInSuccess] = useState(false);
+	const [authenticatedAddress, setAuthenticatedAddress] = useState('');
+	const [isConnected, setIsConnected] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-    const { moon, createAccount, disconnect, updateToken, initialize } = useMoonSDK();
+	const { moon, connect, createAccount, disconnect, updateToken, initialize } =
+		useMoonSDK();
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value);
-    };
+	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(event.target.value);
+	};
 
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    };
+	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(event.target.value);
+	};
 
-    const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setConfirmPassword(event.target.value);
-    };
+	const handleConfirmPasswordChange = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setConfirmPassword(event.target.value);
+	};
 
-    const handleInitializeAndConnect = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+	const handleInitializeAndConnect = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-            // Initialize and connect to Moon
-            console.log('Initializing and connecting to Moon...');
-            await initialize();
-            console.log('Connected to Moon!');
-            setIsConnected(true);
-        } catch (error) {
-            console.error('Error during connection:', error);
-            setError('Error connecting to Moon. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+			// Initialize and connect to Moon
+			console.log('Initializing and connecting to Moon...');
+			await initialize();
+			await connect();
+			console.log('Connected to Moon!');
+			setIsConnected(true);
+		} catch (error) {
+			console.error('Error during connection:', error);
+			setError('Error connecting to Moon. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 
-    const handleSignup = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+	const handleSignup = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-            if (password !== confirmPassword) {
-                setPasswordError('Passwords do not match');
-            } else {
-                setPasswordError('');
+			if (password !== confirmPassword) {
+				setPasswordError('Passwords do not match');
+			} else {
+				setPasswordError('');
 
-                // Sign up the user
-                const auth = moon.getAuthSDK();
-                const signupRequest: EmailSignupInput = {
-                    email,
-                    password,
-                };
-                console.log('Signing up...');
-                const signupResponse: any = await auth.emailSignup(signupRequest);
-                console.log('Signup successful:', signupResponse);
+				// Sign up the user
+				const auth = moon.getAuthSDK();
+				const signupRequest: EmailSignupInput = {
+					email,
+					password,
+				};
+				console.log('Signing up...');
+				const signupResponse: any = await auth.emailSignup(signupRequest);
+				console.log('Signup successful:', signupResponse);
 
-                setSignupSuccess(true);
-            }
-        } catch (error) {
-            console.error('Error during signup:', error);
-            setError('Error signing up. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+				setSignupSuccess(true);
+			}
+		} catch (error) {
+			console.error('Error during signup:', error);
+			setError('Error signing up. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 
-    const handleSignIn = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+	const handleSignIn = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-            // Authenticate the user and sign in
-            const auth = moon.getAuthSDK();
-            const loginRequest: EmailLoginInput = {
-                email,
-                password,
-            };
-            console.log('Authenticating...');
-            const loginResponse: any = await auth.emailLogin(loginRequest);
-            console.log('Authentication successful:', loginResponse);
+			// Authenticate the user and sign in
+			const auth = moon.getAuthSDK();
+			const loginRequest: EmailLoginInput = {
+				email,
+				password,
+			};
+			console.log('Authenticating...');
+			const loginResponse: any = await auth.emailLogin(loginRequest);
+			console.log('Authentication successful:', loginResponse);
 
-            // Set tokens and email
-            console.log('Updating tokens and email...');
-            await updateToken(loginResponse.data.token, loginResponse.data.refreshToken);
-            moon.MoonAccount.setEmail(email);
-            moon.MoonAccount.setExpiry(loginResponse.data.expiry);
-            console.log('Tokens and email updated!');
+			// Set tokens and email
+			console.log('Updating tokens and email...');
+			await updateToken(
+				loginResponse.data.token,
+				loginResponse.data.refreshToken
+			);
+			moon.MoonAccount.setEmail(email);
+			moon.MoonAccount.setExpiry(loginResponse.data.expiry);
+			console.log('Tokens and email updated!');
 
-            // Perform sign-in logic with MoonSDK
-            console.log('Creating account...');
-            const newAccount = await createAccount();
-            console.log('New Account Data:', newAccount?.data);
-            console.log('Setting expiry and navigating...');
-            moon.MoonAccount.setExpiry(loginResponse.data.expiry);
-            setSignInSuccess(true);
-            setAuthenticatedAddress(newAccount.data.data.address);
-            console.log('Authenticated Address:', newAccount.data.data.address);
-        } catch (error) {
-            console.error('Error during sign-in:', error);
-            setError('Error signing in. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDisconnect = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            // Disconnect from Moon
-            console.log('Disconnecting...');
-            await disconnect();
-            console.log('Disconnected');
-            setIsConnected(false);
-        } catch (error) {
-            console.error('Error during disconnection:', error);
-            setError('Error disconnecting from Moon. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="flex justify-center items-center h-screen">
-            {!isConnected && (
-                <div>
-                    <h2 className="text-2xl font-bold mb-4 text-center">Initialize & Connect to Moon</h2>
-                    <button
-                        type="button"
-                        className="bg-blue-500 text-white p-2 rounded"
-                        onClick={handleInitializeAndConnect}
-                    >
-                        {loading ? 'Connecting...' : 'Initialize & Connect to Moon'}
-                    </button>
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
-                </div>
-            )}
-
-            {isConnected && !signupSuccess && !signInSuccess && (
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
-                    <div className="mb-4">
-                        <h2 className="text-2xl font-bold mb-4 text-center">Sign up for a Moon Account</h2>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="w-full border p-2 rounded mb-2"
-                            value={email}
-                            onChange={handleEmailChange}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-full border p-2 rounded mb-2"
-                            value={password}
-                            onChange={handlePasswordChange}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            className={`w-full border p-2 rounded mb-2 ${passwordError ? 'border-red-500' : ''}`}
-                            value={confirmPassword}
-                            onChange={handleConfirmPasswordChange}
-                        />
-                        {passwordError && (
-                            <p className="text-red-500 text-xs italic">{passwordError}</p>
-                        )}
-                    </div>
-                    <div className="flex justify-center">
-                        <button
-                            type="button"
-                            className="bg-blue-500 text-white p-2 rounded"
-                            onClick={handleSignup}
-                        >
-                            {loading ? 'Signing up...' : 'Sign up for a Moon Account'}
-                        </button>
-                        {error && <p className="text-red-500 ml-2">{error}</p>}
-                    </div>
-                </form>
-            )}
-
-            {signupSuccess && !signInSuccess && isConnected && (
-                <div className="mb-4 text-center">
-                    <p>Congratulations! Your Moon account is created.</p>
-                    <p>Now that you have created an account, sign in.</p>
-                    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
-                        <div className="mb-4">
-                            <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                className="w-full border p-2 rounded mb-2"
-                                value={email}
-                                onChange={handleEmailChange}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                className="w-full border p-2 rounded mb-2"
-                                value={password}
-                                onChange={handlePasswordChange}
-                            />
-                        </div>
-                        <div className="flex justify-center">
-                            <button
-                                type="button"
-                                className="bg-blue-500 text-white p-2 rounded"
-                                onClick={handleSignIn}
-                            >
-                                {loading ? 'Signing in...' : 'Sign In'}
-                            </button>
-                            {error && <p className="text-red-500 ml-2">{error}</p>}
-                        </div>
-                    </form>
-                </div>
+			// Perform sign-in logic with MoonSDK
+			console.log('Creating account...');
+			const newAccount = await createAccount();
+			console.log('New Account Data:', newAccount?.data);
+			console.log('Setting expiry and navigating...');
+			moon.MoonAccount.setExpiry(loginResponse.data.expiry);
+			setSignInSuccess(true);
+			setAuthenticatedAddress(newAccount.data.data.address);
+			console.log('Authenticated Address:', newAccount.data.data.address);
+		} catch (error) {
+			console.error('Error during sign-in:', error);
+			setError('Error signing in. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
 
 
-            )}
 
-            {signInSuccess && isConnected && (
-                <div className="mt-4 text-center">
-                    <p>Authenticated Address: {authenticatedAddress}</p>
-                    <button
-                        type="button"
-                        className="bg-red-500 text-white p-2 rounded mt-2"
-                        onClick={handleDisconnect}
-                    >
-                        {loading ? 'Disconnecting...' : 'Disconnect from Moon'}
-                    </button>
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
-                </div>
-            )}
-        </div>
-    );
+	const handleDisconnect = async () => {
+		try {
+			setLoading(true);
+			setError(null);
+
+			// Disconnect from Moon
+			console.log('Disconnecting...');
+			await disconnect();
+			console.log('Disconnected');
+			setIsConnected(false);
+		} catch (error) {
+			console.error('Error during disconnection:', error);
+			setError('Error disconnecting from Moon. Please try again.');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<div className="flex justify-center items-center h-screen">
+			{!isConnected && (
+				<div>
+					<h2 className="text-2xl font-bold mb-4 text-center">
+						Initialize & Connect to Moon
+					</h2>
+					<button
+						type="button"
+						className="bg-blue-500 text-white p-2 rounded"
+						onClick={handleInitializeAndConnect}
+					>
+						{loading ? 'Connecting...' : 'Initialize & Connect to Moon'}
+					</button>
+					{error && <p className="text-red-500 mt-2">{error}</p>}
+				</div>
+			)}
+
+			{isConnected && !signupSuccess && !signInSuccess && (
+				<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
+					<div className="mb-4">
+						<h2 className="text-2xl font-bold mb-4 text-center">
+							Sign up for a Moon Account
+						</h2>
+						<input
+							type="email"
+							placeholder="Email"
+							className="w-full border p-2 rounded mb-2"
+							value={email}
+							onChange={handleEmailChange}
+						/>
+					</div>
+					<div className="mb-4">
+						<input
+							type="password"
+							placeholder="Password"
+							className="w-full border p-2 rounded mb-2"
+							value={password}
+							onChange={handlePasswordChange}
+						/>
+					</div>
+					<div className="mb-4">
+						<input
+							type="password"
+							placeholder="Confirm Password"
+							className={`w-full border p-2 rounded mb-2 ${
+								passwordError ? 'border-red-500' : ''
+							}`}
+							value={confirmPassword}
+							onChange={handleConfirmPasswordChange}
+						/>
+						{passwordError && (
+							<p className="text-red-500 text-xs italic">{passwordError}</p>
+						)}
+					</div>
+					<div className="flex justify-center">
+						<button
+							type="button"
+							className="bg-blue-500 text-white p-2 rounded"
+							onClick={handleSignup}
+						>
+							{loading ? 'Signing up...' : 'Sign up for a Moon Account'}
+						</button>
+						{error && <p className="text-red-500 ml-2">{error}</p>}
+					</div>
+				</form>
+			)}
+
+			{signupSuccess && !signInSuccess && isConnected && (
+				<div className="mb-4 text-center">
+					<p>Congratulations! Your Moon account is created.</p>
+					<p>Now that you have created an account, sign in.</p>
+					<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
+						<div className="mb-4">
+							<h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
+							<input
+								type="email"
+								placeholder="Email"
+								className="w-full border p-2 rounded mb-2"
+								value={email}
+								onChange={handleEmailChange}
+							/>
+						</div>
+						<div className="mb-4">
+							<input
+								type="password"
+								placeholder="Password"
+								className="w-full border p-2 rounded mb-2"
+								value={password}
+								onChange={handlePasswordChange}
+							/>
+						</div>
+						<div className="flex justify-center">
+							<button
+								type="button"
+								className="bg-blue-500 text-white p-2 rounded"
+								onClick={handleSignIn}
+							>
+								{loading ? 'Signing in...' : 'Sign In'}
+							</button>
+							{error && <p className="text-red-500 ml-2">{error}</p>}
+						</div>
+					</form>
+				</div>
+			)}
+
+			{signInSuccess && isConnected && (
+				<div className="mt-4 text-center">
+					<p>Authenticated Address: {authenticatedAddress}</p>
+					<button
+						type="button"
+						className="bg-red-500 text-white p-2 rounded mt-2"
+						onClick={handleDisconnect}
+					>
+						{loading ? 'Disconnecting...' : 'Disconnect from Moon'}
+					</button>
+					{error && <p className="text-red-500 mt-2">{error}</p>}
+				</div>
+			)}
+		</div>
+	);
 };
 
 export default SignupPage;
-```
+ ```
 11. To run the application, navigate in the terminal to the project folder
  ```
 cd moon-sdk/my-moon-app-test
@@ -789,7 +826,7 @@ and navigate to the proper local host site.
 
 - **Moon SDK GitHub:** [https://github.com/moon-up/moon-sdk](https://github.com/moon-up/moon-sdk)
 - **Moon API Documentation:** [https://docs.usemoon.ai/](https://docs.usemoon.ai/)
--  **Moon Swagger API Documentation:** [https://vault-api.usemoon.ai/.well-known/swagger.json](https://vault-api.usemoon.ai/.well-known/swagger.json)
+- **Moon Swagger API Documentation:** [https://vault-api.usemoon.ai/.well-known/swagger.json](https://vault-api.usemoon.ai/.well-known/swagger.json)
 - **MoonGPT Chat:** [https://chat.openai.com/g/g-1Ou9DoNMd-usemoon-ai](https://chat.openai.com/g/g-1Ou9DoNMd-usemoon-ai)
 - **Moon Package Documentation:** [https://docs.usemoon.ai/docs/moon-sdk/introduction](https://docs.usemoon.ai/docs/moon-sdk/introduction)
 - **Moon ChatGPT AI Plugin Spec:** [https://vault-api.usemoon.ai/.well-known/ai-plugin.json](https://vault-api.usemoon.ai/.well-known/ai-plugin.json)
