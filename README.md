@@ -134,7 +134,7 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
 
         });
         setMoon(moonInstance);
-        moonInstance.login();
+        moonInstance.connect();
     };
 ```
 9. Let's now define additional functions we will need for our code: update token, create account, and disconnect. There are many more functions you can defined, but these are commmon ones you may use on your moon project.
@@ -145,7 +145,7 @@ const [moon, setMoon] = useState<MoonSDK | null>(null);
             moon.updateToken(token);
             moon.updateRefreshToken(refreshToken);
 
-            moon.login();
+            moon.connect();
         }
     };
 
@@ -197,7 +197,7 @@ export const useMoonSDK = () => {
 
         });
         setMoon(moonInstance);
-        moonInstance.login();
+        moonInstance.connect();
     };
 
     const updateToken = async (token: string, refreshToken: string) => {
@@ -205,7 +205,7 @@ export const useMoonSDK = () => {
             moon.updateToken(token);
             moon.updateRefreshToken(refreshToken);
 
-            moon.login();
+            moon.connect();
         }
     };
 
