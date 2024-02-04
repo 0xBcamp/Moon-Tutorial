@@ -56,7 +56,7 @@ Users can construct and sign transactions using methods similar to those in ethe
 
 To get started with Moon SDK, clone the repository, install the required dependencies, and create a react & next.js boilerplate project using either npm or yarn.
 
-1. Clone the github moon-sdk package. Please note this package is available in multiple languagues. For this tutorial, we will clone the below TypeScript package.
+1. Clone the github moon-sdk package. Please note this package is available in multiple languages. For this tutorial, we will clone the below TypeScript package.
 ```
 git clone https://github.com/moon-up/moon-sdk.git
 ```
@@ -64,7 +64,7 @@ git clone https://github.com/moon-up/moon-sdk.git
 ```
 cd moon-sdk
 ```
-3. Install  @moonup/moon-sdk, which will give install the dependencies needed to start our project.
+3. Install  @moonup/moon-sdk, which will install the dependencies needed to start our project.
 
 Using npm
 ```
@@ -74,11 +74,11 @@ Using yarn
 ```
 yarn add @moonup/moon-sdk
 ```
-4. Create the Next.JS and React boilderplate using npx @moonup/create
+4. Create the Next.JS and React boilerplate using npx @moonup/create
 ```
 npx @moonup/create
 ```
-5. Answer the questions to create the Next.js and React boilerplate. While you can certianly configure options as needed for the project, let's enter the below for this tutorial. Let's name our app 'my-moon-app-test' and select 'Yes' for all options, expcept for ' default import alias'.
+5. Answer the questions to create the Next.js and React boilerplate. While you can certainly configure options as needed for the project, let's enter the below for this tutorial. Let's name our app 'my-moon-app-test' and select 'Yes' for all options, except for ' default import alias'.
 ```
 ? What is your project named? » my-moon-app-test
 ? Would you like to use TypeScript? » Yes
