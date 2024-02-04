@@ -10,7 +10,7 @@ Welcome to the Moon Workshop, your comprehensive guide to exploring and integrat
 
 ## Product Description 🧩
 
-Moon is a highly composable wallet infrastructure designed to simplify user-friendly, AI-compatible dApp development. Comprising wallet as a service, authentication as a service, and AI as a service products, Moon offers seamless integration for payment processing, data infrastructure solutions, highly streamlined and abstracted blockchain transactions, and more. Moon is compatible with all standard EVM blockchains, allowing developers and users a universal experience regardless of what chain being used.
+Moon is a highly composable wallet infrastructure designed to simplify user-friendly, AI-compatible dApp development. Comprising wallet as a service, authentication as a service, and AI as a service products, Moon offers seamless integration for payment processing, data infrastructure solutions, highly streamlined and abstracted blockchain transactions, and more. Moon is compatible with all standard EVM blockchains, allowing developers and users a universal experience regardless of what chain is being used.
 
 ### Key Features 🚀
 
